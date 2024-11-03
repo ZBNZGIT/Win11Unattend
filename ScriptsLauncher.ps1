@@ -5,7 +5,7 @@ function Show-Menu {
     Clear-Host
     Write-Host "1. Install Apps"
     Write-Host "2. Remove Edge" 
-    Write-Host "3. Activate Windows (It does take a bit to open)"
+    Write-Host "3. Activate Windows (Script will restart, please be patient...)"
     Write-Host "4. Exit"
 }
 
