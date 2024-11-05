@@ -24,7 +24,7 @@ function Run-Script {
 
 do {
     Show-Menu
-    switch (Read-Host "Please select an option (1-3)") {
+    switch (Read-Host "Please select an option (1-4)") {
         '1' { Run-Script -scriptUrl $script1Url; exit }
         '2' { Run-Script -scriptUrl $script2Url; exit }
         '3' { Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"irm https://get.activated.win | iex`"" -WindowStyle Hidden; Stop-Process -Id $PID }
