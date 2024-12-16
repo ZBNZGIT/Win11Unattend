@@ -1,15 +1,8 @@
-$script1Url = "https://raw.githubusercontent.com/ZBNZGIT/AppsInstaller/main/ChocolateyInstallApps.bat"
-$script2Url = "https://raw.githubusercontent.com/ZBNZGIT/RemoveEdge/main/RemovesEdge.bat"
+$InstallApps = "https://raw.githubusercontent.com/ZBNZGIT/AppsInstaller/main/ChocolateyInstallApps.bat"
+$RemoveEdge = "https://raw.githubusercontent.com/ZBNZGIT/RemoveEdge/main/RemovesEdge.bat" 
+$MASActivation = "https://raw.githubusercontent.com/massgravel/get.activated.win/main/get"
 
-function Show-Menu {
-    Clear-Host
-    Write-Host "1. Install Apps"
-    Write-Host "2. Remove Edge" 
-    Write-Host "3. Activate Windows (Script will restart, please be patient...)"
-    Write-Host "4. Exit"
-}
-
-function Run-Script {
+function RunBatchScript {
     param ([string]$scriptUrl)
     try {
         $scriptContent = Invoke-RestMethod -Uri $scriptUrl
@@ -18,20 +11,45 @@ function Run-Script {
         Start-Process -FilePath "cmd.exe" -ArgumentList "/c $tempFile" -WindowStyle Normal
     }
     catch {
-        Write-Error "An error occurred: $_"
+        $errorMessage = "An error occurred while executing the batch script."
+        Write-Host $errorMessage -ForegroundColor Yellow
     }
+}
+
+function RunMASActivation {
+    [CmdletBinding()]
+    param()
+    try {
+        Invoke-RestMethod -Uri $MASActivation | Invoke-Expression
+    }
+    catch {
+        Write-Error "An error occurred when running MAS Activation script"
+        Write-Host $errorMessage -ForegroundColor Yellow
+    }
+}
+
+function Show-Menu {
+Clear-Host
+@"
+1. Install Apps
+2. Remove Edge
+3. Activate Windows
+4. Exit
+"@ | Write-Host
 }
 
 do {
     Show-Menu
-    switch (Read-Host "Please select an option (1-4)") {
-        '1' { Run-Script -scriptUrl $script1Url; exit }
-        '2' { Run-Script -scriptUrl $script2Url; exit }
-        '3' { Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"irm https://raw.githubusercontent.com/massgravel/get.activated.win/main/get | iex`"" -WindowStyle Hidden; Stop-Process -Id $PID }
+    $choice = Read-Host "Please select an option (1-4)"
+    
+    switch ($choice) {
+        '1' { RunBatchScript -scriptUrl $InstallApps; exit }
+        '2' { RunBatchScript -scriptUrl $RemoveEdge; exit }
+        '3' { RunMASActivation; exit }
         '4' { exit }
-        default { Write-Host "Invalid choice, please try again." }
+        default { Write-Host "Invalid choice, please try again." -ForegroundColor Red }
     }
+    if ($choice -match '[1-3]') { exit }
 } while ($true)
 
-
-timeout -t 3 -nobreak > nul
+Start-Sleep -Seconds 3
