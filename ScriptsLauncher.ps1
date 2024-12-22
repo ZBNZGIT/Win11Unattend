@@ -1,6 +1,6 @@
 $InstallApps = "https://raw.githubusercontent.com/ZBNZGIT/AppsInstaller/main/ChocolateyInstallApps.bat"
 $RemoveEdge = "https://raw.githubusercontent.com/ZBNZGIT/RemoveEdge/main/RemovesEdge.bat" 
-$MASActivation = "https://raw.githubusercontent.com/massgravel/get.activated.win/main/get"
+$MASActivation = "https://get.activated.win"
 
 function RunBatchScript {
     param ([string]$scriptUrl)
