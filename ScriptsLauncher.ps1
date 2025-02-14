@@ -1,5 +1,5 @@
 $InstallApps = "https://raw.githubusercontent.com/ZBNZGIT/AppsInstaller/main/ChocolateyInstallApps.bat"
-$RemoveEdge = "https://raw.githubusercontent.com/ZBNZGIT/RemoveEdge/main/RemovesEdge.bat" 
+$RemoveEdge = "https://raw.githubusercontent.com/ZBNZGIT/RemoveEdge/main/RemoveEdge.ps1" 
 $MASActivation = "https://get.activated.win"
 
 function RunBatchScript {
@@ -12,6 +12,18 @@ function RunBatchScript {
     }
     catch {
         $errorMessage = "An error occurred while executing the batch script."
+        Write-Host $errorMessage -ForegroundColor Yellow
+    }
+}
+
+function RunRemoveEdge {
+    [CmdletBinding()]
+    param()
+    try {
+        Invoke-RestMethod -Uri $RemoveEdge | Invoke-Expression
+    }
+    catch {
+        Write-Error "An error occurred when running Remove Edge script"
         Write-Host $errorMessage -ForegroundColor Yellow
     }
 }
@@ -44,7 +56,7 @@ do {
     
     switch ($choice) {
         '1' { RunBatchScript -scriptUrl $InstallApps; exit }
-        '2' { RunBatchScript -scriptUrl $RemoveEdge; exit }
+        '2' { RunRemoveEdge; exit }
         '3' { RunMASActivation; exit }
         '4' { exit }
         default { Write-Host "Invalid choice, please try again." -ForegroundColor Red }
